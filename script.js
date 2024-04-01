@@ -1,44 +1,49 @@
-const word = document.querySelector('.word');
-const correctCountSpan = document.querySelector('.correct-count');
-const wrongCountSpan = document.querySelector('.wrong-count');
-const wordMistakesSpan = document.querySelector('.word-mistakes');
-const wordSpans = word.querySelectorAll('span');
+const wordHolder = document.querySelector('.word');
+const correctCountContainer = document.querySelector('.correct-count');
+const wrongCountContainer = document.querySelector('.wrong-count');
+const wordMistakesContainer = document.querySelector('.word-mistakes');
+const wordSpans = wordHolder.querySelectorAll('span');
 
 let correctCount = 0; 
 let wrongCount = 0;
 let wordMistakes = 0;
 let currentCharIndex = 0;
 
-const words = ['apple', 'flowers', 'javascript', 'innovations'];
+const words = ['apple', 'flowers', 'javascript', 'banana', 'innovations'];
 const randomWord = words[Math.floor(Math.random() * words.length)];
 
-wordSpans.forEach((span, index) => {
-    span.textContent = randomWord[index];
-  });
+function renderWord(word) {
+    wordHolder.innerHTML = word
+    .split("")
+    .map((char) => <span>${char}</span>)
+    .join("");
+    }
+    
+    renderWord(randomWord);
 
   document.addEventListener('keydown', (event) => {
-    if (event.key.toLowerCase() === randomWord[currentCharIndex]) {
-      wordSpans[currentCharIndex].style.color = 'green';
+    if (event.key === randomWord[currentCharIndex]) {
+      wordSpans[currentCharIndex].className = "c";
       currentCharIndex++;
-      correctCount++;
-      correctCountSpan.textContent = correctCount;
     } else {
-        wordSpans[currentCharIndex].style.color = 'red';
-    currentCharIndex++;
+        wordSpans[currentCharIndex].className = "w";
+      currentCharIndex++;
       wrongCount++;
       wordMistakes++;
-      wrongCountSpan.textContent = wrongCount;
-      wordMistakesSpan.textContent = wordMistakes;
+      wrongCountContainer.textContent = wrongCount;
+      wordMistakesContainer.textContent = wordMistakes;
       
     }
   
     if (currentCharIndex === randomWord.length) {
-
-          wordSpans.forEach((span) => {
-            span.style.color = 'green';
-          });
-          currentCharIndex = 0;
-          wordMistakes = 0;
-          wordMistakesSpan.textContent = wordMistakes;
+        if (correctCount === 5) {
+            alert('Вы успешно прошли игру!');
+        } else if (wrongCount === 5) {
+            alert('Вы проиграли!');
         }
+        
+        currentCharIndex = 0;
+        wordMistakes = 0;
+        wordMistakesContainer.textContent = wordMistakes;
+    }
   });
